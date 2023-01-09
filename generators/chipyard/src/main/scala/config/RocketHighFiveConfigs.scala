@@ -10,11 +10,12 @@ import freechips.rocketchip.diplomacy.{AsynchronousCrossing}
 
 // DOC include start: HighFiveRocket
 class HighFiveRocketConfig extends Config(
-  new highfive.WithSha3Accel ++                                // add HighFive rocc accelerator
+  new hpu.WithHPUAccel ++                                // add HighFive rocc accelerator
   new freechips.rocketchip.subsystem.WithNBigCores(1) ++
   new chipyard.config.AbstractConfig)
 // DOC include end: HighFiveRocket
 
+// No printf statement now
 /*
 class Sha3RocketPrintfConfig extends Config(
   new sha3.WithSha3Printf ++

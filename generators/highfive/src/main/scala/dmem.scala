@@ -1,6 +1,6 @@
 //see LICENSE for license
 //authors: Albert Ou
-package sha3
+package hpu
 
 import Chisel._
 import freechips.rocketchip.config.{Field, Parameters}
@@ -9,12 +9,12 @@ import freechips.rocketchip.rocket.{HellaCacheReq, TLB, TLBPTWIO, TLBConfig, MSt
 import freechips.rocketchip.diplomacy._
 import freechips.rocketchip.tilelink._
 
-case object Sha3TLB extends Field[Option[TLBConfig]](None)
+case object HPUTLB extends Field[Option[TLBConfig]](None)
 
 class DmemModule(implicit p: Parameters) extends LazyModule {
   lazy val module = new DmemModuleImp(this)
   // FIXME: Unused Diplomacy node needed for conveying the physical address map to the TLB
-  val node = TLClientNode(Seq(TLMasterPortParameters.v1(Seq(TLMasterParameters.v1("SHA3")))))
+  val node = TLClientNode(Seq(TLMasterPortParameters.v1(Seq(TLMasterParameters.v1("HPU")))))
 }
 
 class DmemModuleImp(outer: DmemModule)(implicit p: Parameters) extends LazyModuleImp(outer)
@@ -36,7 +36,7 @@ class DmemModuleImp(outer: DmemModule)(implicit p: Parameters) extends LazyModul
   tl.d.ready := Bool(true)
   tl.e.valid := Bool(false)
 
-  val tlb = Module(new TLB(false, log2Ceil(coreDataBytes), p(Sha3TLB).get)(edge, p))
+  val tlb = Module(new TLB(false, log2Ceil(coreDataBytes), p(HPUTLB).get)(edge, p))
   tlb.io.req.valid := io.req.valid
   tlb.io.req.bits.vaddr := io.req.bits.addr
   tlb.io.req.bits.size := io.req.bits.size
