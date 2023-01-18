@@ -32,6 +32,20 @@ class HPUBlackBox(implicit p: Parameters) extends BlackBox with HasBlackBoxResou
 
   addResource("/vsrc/HPUBlackBox.v")
 }
+class AdderBlackBox(implicit p: Parameters) extends BlackBox{
+  val io = IO(new Bundle{
+	  val in1 = Bits(Input,4)
+	  val in2= Bits(Input,4)
+	  val out= Bits(OUTPUT,4)}
+
+  addResource("/vsrc/AdderBlackBox.v") 
+  io.in1.setName("in1")
+  io.in2.setName("in2")
+  io.out.setName("out")
+  moduleName="adder"
+	    
+}
+
 
 class HPUAccel(opcodes: OpcodeSet)(implicit p: Parameters) extends LazyRoCC(
     opcodes = opcodes, nPTWPorts = if (p(HPUTLB).isDefined) 1 else 0) {
